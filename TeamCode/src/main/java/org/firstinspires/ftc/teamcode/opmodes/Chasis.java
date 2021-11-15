@@ -12,10 +12,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@TeleOp(name="MainChassis", group="Linear Opmode")
 public class Chasis extends LinearOpMode {
-    private BNO055IMU imu = null;
-    BNO055IMU.Parameters parameters = null;
+    //private BNO055IMU imu = null;
+    //BNO055IMU.Parameters parameters = null;
 
 
     //public class BasicOpMode_Linear extends LinearOpMode {
@@ -27,6 +27,7 @@ public class Chasis extends LinearOpMode {
     private DcMotor botleft = null;
     private DcMotor botright = null;
     private DcMotor arm=null;
+    private DcMotor encoder = null;
 
     long lastTimeStamp;
     int sensitivity = 1000;
@@ -37,7 +38,7 @@ public class Chasis extends LinearOpMode {
         //telemetry.addData("Status", "Initialized");
         //telemetry.update();
         lastTimeStamp = System.currentTimeMillis();
-
+/*
         parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -47,7 +48,7 @@ public class Chasis extends LinearOpMode {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-
+*/
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -126,19 +127,26 @@ public class Chasis extends LinearOpMode {
             botright.setPower(-1*gamepad1.right_stick_x);
 
             //"Arm"
-            if (gamepad1.left_bumper  && System.currentTimeMillis() - lastTimeStamp > sensitivity) {
+
+            if (gamepad1.left_bumper  /*&& System.currentTimeMillis() - lastTimeStamp > sensitivity*/) {
                 if (state==0 ){
-                    arm.setPower(0.6);
+                    arm.setPower(1);
+                    if (arm.getCurrentPosition()>=10000){
+                        arm.setPower(0);
+                    }
                 }
                 else if (state==1 ){
                     arm.setPower(-1);
+                    if (arm.getCurrentPosition()<0){
+                        arm.setPower(0);
+                    }
                 }
-                //if (encoder.getCurrentPosition()>=1000)
                 state=1-state;
             }
+/*
             if (gamepad1.right_bumper  && System.currentTimeMillis() - lastTimeStamp > sensitivity)
-                arm.setPower(-0.5);
-
+                arm.setPower(-1);
+*/
             telemetry.addData("rightStick on", "Pressed?: " + gamepad1.right_stick_x);
             //telemetry.addData("status", "pressed: " + message);
             //telemetry.addData("Previous", "Prev. B status: " );

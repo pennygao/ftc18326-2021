@@ -729,7 +729,7 @@ public class FtcRobotControllerActivity extends Activity
 
   private void shutdownRobot() {
     if (controllerService != null) {
-      system.out.println("Beep Boop.");
+      System.out.println("Beep Boop.");
       controllerService.shutdownRobot();
     }
   }
